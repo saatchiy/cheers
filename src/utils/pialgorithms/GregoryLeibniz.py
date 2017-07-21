@@ -1,4 +1,4 @@
-from PiAlgorithmBase import PiAlgorithmBase
+from .PiAlgorithmBase import PiAlgorithmBase
 
 class GregoryLeibniz(PiAlgorithmBase):
     """Implementation of Pi using Gregory-Leibniz algorithm."""

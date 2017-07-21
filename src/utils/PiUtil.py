@@ -1,4 +1,4 @@
-from pialgorithms.GregoryLeibniz import GregoryLeibniz
+from .pialgorithms.GregoryLeibniz import GregoryLeibniz
 # This is a static util class that provides a function for
 # calculating the PI number
 
