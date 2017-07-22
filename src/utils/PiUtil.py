@@ -1,8 +1,19 @@
 from .pialgorithms.GregoryLeibniz import GregoryLeibniz
+from .pialgorithms.BBP import BBP
+from enum import Enum
+
 # This is a static util class that provides a function for
 # calculating the PI number
 
-print("Calculation of PI constant started.")
+ALGORITHMS = {
+    0: GregoryLeibniz,
+    1: BBP,
+}
+
+class AlgorithmType(Enum):
+    GregoryLeibniz = 0
+    BBP = 1
+
 
 class PiUtility:
 
@@ -11,17 +22,27 @@ class PiUtility:
     __pi = 0
 
     @classmethod
-    def pi(self, precision):
-        if self.__pi == 0:
-            if precision:
-                self.__precision = precision
-            else:
-                self.__precision = self.__DEFAULT_PRECISION
-                
-            self.__calculate_pi()
+    def pi(cls, algorithm_type, precision = __DEFAULT_PRECISION):
+        """Starts the calculation of PI number.
 
-        return self.__pi
+        Keyword arguments:
+        algorithm_type -- The algorithm to be used for the calculation
+        which is one of the enum items of AlgorithmType
+        precision -- The desired precision of the calculation (default 3)
+        """
+        if cls.__pi == 0 or cls.__precision != precision:
+            cls.__precision = precision
+            cls.__calculate_pi(algorithm_type)
+
+        return cls.__pi
 
     @classmethod
-    def __calculate_pi(self):
-        self.__pi = GregoryLeibniz.calculate(self.__precision)
+    def __calculate_pi(cls, algorithm_type):
+        """Internal function for calculation of pi. This function calls
+        the appropriate algorithm implementation based on the selection of
+        the user.
+
+        algorithm_type -- The algorithm to be used for the calculation
+        """
+        print("Calculation of PI constant started.")
+        cls.__pi = ALGORITHMS[algorithm_type.value].calculate(cls.__precision)
