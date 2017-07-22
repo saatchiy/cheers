@@ -8,8 +8,11 @@ class BBP(PiAlgorithmBase):
     def calculate(precision):
         """Calculates Pi number.
 
-        Keyword arguments:
-        precision -- the desired precision of the calculation
+        Args:
+            precision: the desired precision of the calculation
+        
+        Returns:
+            A decimal number calculation of PI.
         """
 
         calculated_pi = D(0)

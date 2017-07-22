@@ -10,7 +10,10 @@ class PiAlgorithmBase(ABC):
     def calculate(self, precision):
         """Abstract method which will be implemented to calculate Pi number.
 
-        Keyword arguments:
-        precision -- the desired precision of calculation
+        Args:
+            precision: the desired precision of calculation
+
+        Returns:
+            A decimal number calculation of PI
         """
         pass

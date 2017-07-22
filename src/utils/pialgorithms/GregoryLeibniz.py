@@ -8,8 +8,11 @@ class GregoryLeibniz(PiAlgorithmBase):
     def calculate(precision):
         """Calculates Pi number.
 
-        Keyword arguments:
-        precision -- The desired precision of the calculation
+        Args:
+            precision: The desired precision of the calculation
+
+        Returns:
+            A decimal number calculation of PI.
         """
 
         # For the first iteration value of one should be passed as a divisor
@@ -26,9 +29,9 @@ class GregoryLeibniz(PiAlgorithmBase):
     def __recurse(divisor, iter_count):
         """Recursive function which does the calculation.
 
-        Keyword arguments:
-        iter_count -- The counter to keep track of the recursion
-        divisor -- The divisor part of the algorithm
+        Args:
+            iter_count: The counter to keep track of the recursion
+            divisor: The divisor part of the algorithm
         """
         divisor = D(math.pow((iter_count * 2) + 1, 2)) / D(divisor)
         print("after power: ", divisor)
