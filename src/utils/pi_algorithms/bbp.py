@@ -1,6 +1,6 @@
 from decimal import Decimal as D
 import math
-from .PiAlgorithmBase import PiAlgorithmBase
+from .pi_algorithm_base import PiAlgorithmBase
 
 class BBP(PiAlgorithmBase):
     """Implementation of Pi using Bailey–Borwein–Plouffe formula."""

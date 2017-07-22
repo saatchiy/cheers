@@ -1,6 +1,6 @@
 from decimal import Decimal as D
 import math
-from .PiAlgorithmBase import PiAlgorithmBase
+from .pi_algorithm_base import PiAlgorithmBase
 
 class GregoryLeibniz(PiAlgorithmBase):
     """Implementation of Pi using Gregory-Leibniz algorithm."""

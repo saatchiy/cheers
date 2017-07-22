@@ -1,5 +1,5 @@
-from .pialgorithms.GregoryLeibniz import GregoryLeibniz
-from .pialgorithms.BBP import BBP
+from .pi_algorithms.gregory_leibniz import GregoryLeibniz
+from .pi_algorithms.bbp import BBP
 from enum import Enum
 
 # This is a static util class that provides a function for
