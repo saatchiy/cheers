@@ -1,8 +1,8 @@
 from decimal import Decimal as D
 import math
-from .pi_algorithm_base import PiAlgorithmBase
+from utils.algorithm_base import AlgorithmBase
 
-class GregoryLeibniz(PiAlgorithmBase):
+class GregoryLeibniz(AlgorithmBase):
     """Implementation of Pi using Gregory-Leibniz algorithm."""
     @staticmethod
     def calculate(precision):

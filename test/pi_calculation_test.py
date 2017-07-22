@@ -1,5 +1,5 @@
 import _src_path
-from utils.pi_util import PiUtility, AlgorithmType
+from utils.pi.pi_util import PiUtility, AlgorithmType
 
 # A test for calculation of PI number
 calculated_pi = PiUtility.pi(AlgorithmType.BBP)

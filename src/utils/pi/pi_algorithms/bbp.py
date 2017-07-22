@@ -1,8 +1,8 @@
 from decimal import Decimal as D
 import math
-from .pi_algorithm_base import PiAlgorithmBase
+from utils.algorithm_base import AlgorithmBase
 
-class BBP(PiAlgorithmBase):
+class BBP(AlgorithmBase):
     """Implementation of Pi using Bailey–Borwein–Plouffe formula."""
     @staticmethod
     def calculate(precision):
