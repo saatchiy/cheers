@@ -1,4 +1,4 @@
-from decimal import Decimal as D
+from mpmath import mpf
 import math
 from utils.algorithm_base import AlgorithmBase
 
@@ -14,13 +14,14 @@ class GregoryLeibniz(AlgorithmBase):
         Returns:
             A decimal number calculation of PI.
         """
-
+        mp.dps = 30
+        
         # For the first iteration value of one should be passed as a divisor
         divisor = GregoryLeibniz.__recurse(1, precision)
 
         print("divisor is: ", divisor)
 
-        calculated_pi = D(4) / D(divisor)
+        calculated_pi = mpf(4) / mpf(divisor)
 
         print("Calculation finished.")
         print("PI value is: ", calculated_pi)
@@ -33,7 +34,7 @@ class GregoryLeibniz(AlgorithmBase):
             iter_count: The counter to keep track of the recursion
             divisor: The divisor part of the algorithm
         """
-        divisor = D(math.pow((iter_count * 2) + 1, 2)) / D(divisor)
+        divisor = mpf(math.pow((iter_count * 2) + 1, 2)) / mpf(divisor)
         print("after power: ", divisor)
         if iter_count == 0:
             divisor += 1

@@ -1,7 +1,7 @@
 import _src_path
 from utils.pi.pi_util import PiUtility, AlgorithmType
 
-# A test for calculation of PI number
+# A test for calculation of PI number with default precision
 calculated_pi = PiUtility.pi(AlgorithmType.BBP)
 print("Calculated PI value is: ", calculated_pi)
 
