@@ -1,3 +1,4 @@
+from mpmath import nstr
 from .pi_algorithms.gregory_leibniz import GregoryLeibniz
 from .pi_algorithms.bbp import BBP
 from enum import Enum
@@ -53,3 +54,4 @@ class PiUtility:
         """
         print("Calculation of PI constant started.")
         cls.__pi = ALGORITHMS[algorithm_type.value].calculate(cls.__precision)
+        print("PI with the precision of", cls.__precision, "is:", nstr(cls.__pi, cls.__precision))
