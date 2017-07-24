@@ -8,13 +8,19 @@ class Newton(AlgorithmBase):
     # The initial value for the first iteration of the newton algorithm
     __INITIAL_VALUE = mpf("2.5")
 
+    # Pi
+    __PI = PiUtility.pi(AlgorithmType.BBP, 30)
+
     # Pi / 2
-    __PI_OVER_TWO = PiUtility.pi(AlgorithmType.BBP, 30)/mpf(2)
+    __PI_OVER_TWO = __PI/mpf(2)
 
     @classmethod
     def get_initial_value(cls):
         return cls.__INITIAL_VALUE
 
+    @classmethod
+    def get__calculated_pi(cls):
+        return cls.__PI
 
     @classmethod
     def calculate(cls, precision):
@@ -55,12 +61,12 @@ class Newton(AlgorithmBase):
 
 
     @classmethod
-    def __calculate_derivative_function(cls, alpha):
+    def __calculate_diff_function(cls, alpha):
         result = mpf(1) - cos(alpha)
         return result
 
 
     @classmethod
     def __calculate_next_alpha(cls, alpha):
-        subtraction_part = cls.__calculate_original_function(alpha) / cls.__calculate_derivative_function(alpha)
+        subtraction_part = cls.__calculate_original_function(alpha) / cls.__calculate_diff_function(alpha)
         return alpha - subtraction_part

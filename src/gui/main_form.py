@@ -1,12 +1,14 @@
 from tkinter import *
 import sys
-from src.overlap_calculator.overlap_calculator import OverlapCalculator
+from mpmath import mpf, nstr
+from overlap_calculator.overlap_calculator import OverlapCalculator
 
 class MainForm:
 
     def __init__(self):
         self.__radius = -1
-        self.__result = ""
+        self.__result = -1
+        self.__result_str = ""
         self.__init_main_form()
 
     def __init_main_form(self):
@@ -53,6 +55,7 @@ class MainForm:
 
         # Textbox for the results
         self.__txt_result = Text(output_frame)
+        self.__txt_result.config(state=DISABLED)
 
         # Scrollbar for the result textbox
         scrl_result = Scrollbar(output_frame, orient=VERTICAL, command=self.__txt_result.yview)
@@ -70,20 +73,42 @@ class MainForm:
 
 
     def __compute(self):
-        radius_str = self.__txt_radius.get("1.0", END)
-        
+        """Uses OverlapCalculator class to compute the length of overlapping segment."""
+        radius_str = self.__txt_radius.get()
+
         if self.__validate_input(radius_str):
             self.__radius = mpf(radius_str)
-            length = OverlapCalculator.calculate_overlapping_length(self.__radius)
+            self.__result = OverlapCalculator.calculate_overlapping_length(self.__radius)
+            self.__result_str = nstr(self.__result, 15)
+            # TODO: Precision is fixed to 15, should read this from config file
+            self.__txt_result.config(state=NORMAL)
+            self.__txt_result.delete(1.0, END)
+            self.__txt_result.insert(END, self.__result_str)
+            self.__txt_result.config(state=DISABLED)
+
+
+    def __validate_input(self, input_val):
+        """Checks to see if the input value is valid or not."""
+        try:
+            number = mpf(input_val)
+            if number > 0:
+                return True
+        except ValueError:
+            return False
+
+        return False
 
 
     def display(self):
+        """Displays the main form."""
         self.__main_form.mainloop()
 
     def __change_settings(self):
+        """Changes the settings of the application by saving new values in the xml file."""
         pass
 
     def __save(self):
+        """Saves the results in an xml file."""
         pass
 
     def __exit(self):

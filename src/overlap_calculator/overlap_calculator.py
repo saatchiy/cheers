@@ -9,7 +9,17 @@ class OverlapCalculator:
 
     @classmethod
     def calculate_overlapping_length(cls, coaster_radius):
+        """Calculates the length of the overlapping segment.
 
+        It uses alpha calculator class to find the length of the overlapping
+        segment so that the overlapping area would be half of the area of a coaster
+
+        Args:
+            coaster_radius: The radius of each coaster. A mp float.
+
+        Returns:
+            The length of the overlapping segment. It is a mp float.
+        """
         print("Calculation of overlapping length started.")
         print("Alpha with the precision of", cls.__PRECISION, "is:", nstr(cls.__ALPHA, cls.__PRECISION + 1))
 
