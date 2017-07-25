@@ -8,19 +8,15 @@ class Newton(AlgorithmBase):
     # The initial value for the first iteration of the newton algorithm
     __INITIAL_VALUE = mpf("2.5")
 
-    # Pi
-    __PI = PiUtility.pi(AlgorithmType.BBP, 30)
+    # Decimal places
+    __precision = 0
 
     # Pi / 2
-    __PI_OVER_TWO = __PI/mpf(2)
+    __pi_over_two = 0
 
     @classmethod
     def get_initial_value(cls):
         return cls.__INITIAL_VALUE
-
-    @classmethod
-    def get__calculated_pi(cls):
-        return cls.__PI
 
     @classmethod
     def calculate(cls, precision):
@@ -32,6 +28,9 @@ class Newton(AlgorithmBase):
         Returns:
             The result of the calculation which is the approximation of alpha angle.
         """
+
+        # We calculate pi/2 only once before starting the calculations
+        cls.__pi_over_two = PiUtility.pi() / mpf(2)
 
         # Setting the decimal places
         mp.dps = precision + 1
@@ -56,7 +55,7 @@ class Newton(AlgorithmBase):
 
     @classmethod
     def __calculate_original_function(cls, alpha):
-        result = alpha - sin(alpha) - cls.__PI_OVER_TWO
+        result = alpha - sin(alpha) - cls.pi_pver_two
         return result
 
 
