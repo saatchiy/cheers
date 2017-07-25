@@ -1,7 +1,10 @@
 from tkinter import *
+from tkinter import messagebox
 import sys
 from mpmath import mpf, nstr
 from overlap_calculator.overlap_calculator import OverlapCalculator
+from exceptions.validation_exception import ValidationException
+from exceptions.calculation_exception import CalculationException
 
 class MainForm:
 
@@ -76,7 +79,8 @@ class MainForm:
         """Uses OverlapCalculator class to compute the length of overlapping segment."""
         radius_str = self.__txt_radius.get()
 
-        if self.__validate_input(radius_str):
+        try:
+            self.__validate_input(radius_str)
             self.__radius = mpf(radius_str)
             self.__result = OverlapCalculator.calculate_overlapping_length(self.__radius)
             self.__result_str = nstr(self.__result, 15)
@@ -85,20 +89,25 @@ class MainForm:
             self.__txt_result.delete(1.0, END)
             self.__txt_result.insert(END, self.__result_str)
             self.__txt_result.config(state=DISABLED)
+        except ValidationException as e:
+            self.__handleError(e)
+        except CalculationException as e:
+            self.__handleError(e)
 
 
     def __validate_input(self, input_val):
-        """Checks to see if the input value is valid or not."""
+        """Checks to see if the input value is valid or not. If invalid raise an exception"""
         try:
             number = mpf(input_val)
-            if number > 0:
-                return True
+            if number <= 0:
+                raise ValidationException("The entered number is not in the range. Please enter a positive number.")
         except ValueError:
-            return False
-
-        return False
+            raise ValidationException("The entered value is not a number. Please enter a positive number.")
 
 
+    def __handleError(self, errMessage):
+        messagebox.showerror(title="Error", message=errMessage)
+    
     def display(self):
         """Displays the main form."""
         self.__main_form.mainloop()
