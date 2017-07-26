@@ -125,11 +125,18 @@ class MainForm:
     def __change_settings(self):
         """Changes the settings of the application by saving new values in the xml file."""
         settings_form = SettingsForm(self.__main_form, self.__conditions)
+        conditions = settings_form.get_settings()
+
+        # Writing the new settings on xml file
+        try:
+            SettingsManager.write_settings(conditions)
+        except IOError as err:
+            messagebox.showerror(title="Error", message=err)
 
     def __save(self):
         """Saves the results in an xml file."""
         pass
-    
+
     def __read_settings(self):
         # Default algorithm to calculate pi
         pi_algorithm = PiAlgorithmType.BBP
