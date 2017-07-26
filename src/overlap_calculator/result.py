@@ -1,4 +1,4 @@
-import CalculationConditions
+from .calculation_conditions import CalculationConditions
 
 class Result:
     """Implementation of a class to hold a result and conditions of the calculation."""

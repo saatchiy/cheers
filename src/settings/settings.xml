@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+	<pi>
+		<algorithm>BBP</algorithm>
+	</pi>
+	<alpha>
+		<algorithm>Newton</algorithm>
+		<precision>15</precision>
+	</alpha>
+</settings>

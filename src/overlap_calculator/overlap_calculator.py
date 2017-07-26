@@ -1,7 +1,7 @@
 from mpmath import *
 from utils.pi.pi_util import PiUtility
 from .alpha_calculator.algorithm_runner import AlgorithmRunner, AlgorithmType
-from result import Result
+from .result import Result
 
 class OverlapCalculator:
 

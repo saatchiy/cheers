@@ -3,6 +3,10 @@ from tkinter import messagebox
 import sys
 from mpmath import mpf, nstr
 from overlap_calculator.overlap_calculator import OverlapCalculator
+from settings.settings_manager import SettingsManager
+from utils.pi.pi_util import AlgorithmType as PiAlgorithmType
+from overlap_calculator.alpha_calculator.algorithm_runner import AlgorithmType as AlphaAlgorithmType
+from overlap_calculator.calculation_conditions import CalculationConditions
 from exceptions.validation_exception import ValidationException
 from exceptions.calculation_exception import CalculationException
 
@@ -73,6 +77,7 @@ class MainForm:
         output_frame.pack(side=TOP, fill=BOTH, expand=YES)
 
         self.__main_form.config(menu=menubar)
+        self.__conditions = self.__read_settings()            
 
 
     def __compute(self):
@@ -119,6 +124,23 @@ class MainForm:
     def __save(self):
         """Saves the results in an xml file."""
         pass
+    
+    def __read_settings(self):
+        # Default algorithm to calculate pi
+        pi_algorithm = PiAlgorithmType.BBP
+        alpha_approximation_algorithm = AlphaAlgorithmType.Newton
+        precision = 11
+
+        conditions = None
+
+        try:
+            conditions = SettingsManager.read_settings()
+        except IOError as err:
+            conditions = CalculationConditions(pi_algorithm, alpha_approximation_algorithm, precision)
+            messagebox.showwarning(title="Warning", message=err)
+
+        return conditions
+
 
     def __exit(self):
         sys.exit()
