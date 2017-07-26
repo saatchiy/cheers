@@ -99,8 +99,8 @@ class SettingsManager:
         try:
             # Writing on file
             tree.write(SettingsManager.__get_file_path(), encoding="utf-8", xml_declaration=True)
-        except Exception:
-            errormsg = "Saving the settings failed. Unable to write on the file."
+        except Exception as err:
+            errormsg = "Saving the settings failed. " + err
             print(errormsg)
             raise IOError(errormsg)
 

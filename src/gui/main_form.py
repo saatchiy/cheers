@@ -1,7 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter.filedialog import asksaveasfilename
 import sys
 from mpmath import mpf, nstr
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 from overlap_calculator.overlap_calculator import OverlapCalculator
 from settings.settings_manager import SettingsManager
 from utils.pi.pi_util import AlgorithmType as PiAlgorithmType
@@ -15,8 +18,7 @@ class MainForm:
 
     def __init__(self):
         self.__radius = -1
-        self.__result = -1
-        self.__result_str = ""
+        self.__result_list = []
         self.__init_main_form()
 
     def __init_main_form(self):
@@ -56,10 +58,19 @@ class MainForm:
         btn_calculate = Button(input_frame, text="Start Calculation", command=self.__compute)
         btn_calculate.pack(side=LEFT, fill=NONE, expand=NO)
 
+        # Output frame
         output_frame = Frame(self.__main_form, borderwidth=2, padx=10, pady=5)
+
+        # Top output frame
+        top_output_frame = Frame(output_frame)
+
         # Label for the results section
-        lbl_result = Label(output_frame, text="Result: ", anchor=W, pady=5)
+        lbl_result = Label(top_output_frame, text="Result: ", anchor=W, pady=5)
         lbl_result.pack(side=TOP, fill=X, expand=YES)
+
+        # Button for starting the calculation
+        btn_clear = Button(top_output_frame, text="Clear results", command=self.__clear_results)
+        btn_clear.pack(side=RIGHT, fill=NONE, expand=NO)
 
         # Textbox for the results
         self.__txt_result = Text(output_frame)
@@ -75,6 +86,7 @@ class MainForm:
 
         # Making the frames visible
         input_frame.pack(side=TOP, fill=X, expand=YES)
+        top_output_frame.pack(side=TOP, fill=X, expand=YES)
         output_frame.pack(side=TOP, fill=BOTH, expand=YES)
 
         self.__main_form.config(menu=menubar)
@@ -90,13 +102,17 @@ class MainForm:
         try:
             self.__validate_input(radius_str)
             self.__radius = mpf(radius_str)
-            self.__result = OverlapCalculator.calculate_overlapping_length(self.__radius, self.__conditions)
-            self.__result_str = nstr(self.__result.get_overlapping_length(), self.__conditions.get_precision())
+            result = OverlapCalculator.calculate_overlapping_length(self.__radius, self.__conditions)
+            result_str = nstr(result.get_overlapping_length(), self.__conditions.get_precision())
+
+            # Adding the current result to the list of results
+            self.__result_list.append(result)
 
             # Filling the result textbox with the result of the calculation
             self.__txt_result.config(state=NORMAL)
-            self.__txt_result.delete(1.0, END)
-            self.__txt_result.insert(END, self.__result_str)
+            if len(self.__result_list) != 1:
+                self.__txt_result.insert(END, "\n---------------------------------\n")    
+            self.__txt_result.insert(END, result_str)
             self.__txt_result.config(state=DISABLED)
 
         except ValidationException as err:
@@ -127,15 +143,46 @@ class MainForm:
         settings_form = SettingsForm(self.__main_form, self.__conditions)
         conditions = settings_form.get_settings()
 
-        # Writing the new settings on xml file
-        try:
-            SettingsManager.write_settings(conditions)
-        except IOError as err:
-            messagebox.showerror(title="Error", message=err)
+        if conditions != None:
+            self.__conditions = conditions
+            # Writing the new settings on xml file
+            try:
+                SettingsManager.write_settings(conditions)
+            except IOError as err:
+                messagebox.showerror(title="Error", message=err)
 
     def __save(self):
         """Saves the results in an xml file."""
-        pass
+        path = asksaveasfilename(title="Save Results", defaultextension="xml", 
+                    filetypes=[("XML files", "*.xml")], parent=self.__main_form, initialdir="./")
+        try:
+            self.__save_on_file(path)
+        except IOError as err:
+            messagebox.showerror(title="Error", message=err)
+
+    def __save_on_file(self, path):
+        # Creating the root element "results" and adding subelements "result"
+        results_elem = ET.Element("results")
+
+        for res_elem in self.__result_list:
+            results_elem.append(res_elem.to_xml_element())
+
+        # Adding indentation
+        xml_string = ET.tostring(results_elem, "utf-8")
+        parsed = minidom.parseString(xml_string)
+        indented_xml = parsed.toprettyxml(indent="\t")
+
+        # Generating the xml tree
+        xml_element = ET.fromstring(indented_xml)
+        tree = ET.ElementTree(xml_element)
+
+        try:
+            # Writing on file
+            tree.write(path, encoding="utf-8", xml_declaration=True)
+        except Exception as err:
+            errormsg = "Saving the results failed. " + err
+            print(errormsg)
+            raise IOError(errormsg)
 
     def __read_settings(self):
         # Default algorithm to calculate pi
@@ -152,6 +199,12 @@ class MainForm:
             messagebox.showwarning(title="Warning", message=err)
 
         return conditions
+
+    def __clear_results(self):
+        # Clearing the result list and the textbox
+        self.__txt_result.config(state=NORMAL)
+        self.__txt_result.delete(1.0, END)
+        self.__txt_result.config(state=DISABLED)
 
 
     def __exit(self):
