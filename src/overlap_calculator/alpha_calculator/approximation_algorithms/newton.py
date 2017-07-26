@@ -55,7 +55,7 @@ class Newton(AlgorithmBase):
 
     @classmethod
     def __calculate_original_function(cls, alpha):
-        result = alpha - sin(alpha) - cls.pi_pver_two
+        result = alpha - sin(alpha) - cls.__pi_over_two
         return result
 
 

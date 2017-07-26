@@ -9,6 +9,7 @@ from overlap_calculator.alpha_calculator.algorithm_runner import AlgorithmType a
 from overlap_calculator.calculation_conditions import CalculationConditions
 from exceptions.validation_exception import ValidationException
 from exceptions.calculation_exception import CalculationException
+from gui.settings_form import SettingsForm
 
 class MainForm:
 
@@ -77,7 +78,9 @@ class MainForm:
         output_frame.pack(side=TOP, fill=BOTH, expand=YES)
 
         self.__main_form.config(menu=menubar)
-        self.__conditions = self.__read_settings()            
+
+        # Reading settings from the xml file
+        self.__conditions = self.__read_settings()
 
 
     def __compute(self):
@@ -87,17 +90,19 @@ class MainForm:
         try:
             self.__validate_input(radius_str)
             self.__radius = mpf(radius_str)
-            self.__result = OverlapCalculator.calculate_overlapping_length(self.__radius)
-            self.__result_str = nstr(self.__result, 15)
-            # TODO: Precision is fixed to 15, should read this from config file
+            self.__result = OverlapCalculator.calculate_overlapping_length(self.__radius, self.__conditions)
+            self.__result_str = nstr(self.__result.get_overlapping_length(), self.__conditions.get_precision())
+
+            # Filling the result textbox with the result of the calculation
             self.__txt_result.config(state=NORMAL)
             self.__txt_result.delete(1.0, END)
             self.__txt_result.insert(END, self.__result_str)
             self.__txt_result.config(state=DISABLED)
-        except ValidationException as e:
-            self.__handleError(e)
-        except CalculationException as e:
-            self.__handleError(e)
+
+        except ValidationException as err:
+            self.__handleError(err)
+        except CalculationException as err:
+            self.__handleError(err)
 
 
     def __validate_input(self, input_val):
@@ -119,7 +124,7 @@ class MainForm:
 
     def __change_settings(self):
         """Changes the settings of the application by saving new values in the xml file."""
-        pass
+        settings_form = SettingsForm(self.__main_form, self.__conditions)
 
     def __save(self):
         """Saves the results in an xml file."""

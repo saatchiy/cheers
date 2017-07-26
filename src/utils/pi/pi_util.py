@@ -7,13 +7,13 @@ from enum import Enum
 # calculating the PI number
 
 ALGORITHMS = {
-    0: GregoryLeibniz,
-    1: BBP,
+    0: BBP,
+    1: GregoryLeibniz,
 }
 
 class AlgorithmType(Enum):
-    GregoryLeibniz = 0
-    BBP = 1
+    BBP = 0
+    GregoryLeibniz = 1
 
 
 class PiUtility:
@@ -63,4 +63,4 @@ class PiUtility:
 
     @classmethod
     def get_algorithm(cls):
-        cls.__algorithm
+        return cls.__algorithm
