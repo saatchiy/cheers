@@ -66,8 +66,8 @@ class SettingsManager:
 
     @staticmethod
     def write_settings(conditions):
-        pi_algorithm = conditions.get_pi_algorithm()
-        alpha_approximation_algorithm = conditions.get_approximation_algorithm()
+        pi_algorithm = conditions.get_pi_algorithm().name
+        alpha_approximation_algorithm = conditions.get_approximation_algorithm().name
         precision = conditions.get_precision()
 
         # Creating the root element
@@ -85,7 +85,7 @@ class SettingsManager:
         
         # Creating precision element
         precision_elem = ET.SubElement(alpha_elem, "precision")
-        precision_elem.text = precision
+        precision_elem.text = str(precision)
 
         # Adding indentation
         xml_string = ET.tostring(settings_elem, "utf-8")

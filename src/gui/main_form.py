@@ -24,8 +24,10 @@ class MainForm:
     def __init_main_form(self):
         self.__main_form = Tk()
         self.__main_form.title("Cheers")
-        self.__main_form.minsize(450, 300)
-        self.__main_form.maxsize(450, 300)
+        w = int(self.__main_form.winfo_screenwidth() / 4)
+        h = int(self.__main_form.winfo_screenheight() / 3)
+        self.__main_form.minsize(w, h)
+        self.__main_form.maxsize(w, h)
         self.__create_widgets()
 
     def __create_widgets(self):
@@ -62,22 +64,25 @@ class MainForm:
         output_frame = Frame(self.__main_form, borderwidth=2, padx=10, pady=5)
 
         # Top output frame
-        top_output_frame = Frame(output_frame)
+        top_output_frame = Frame(output_frame, pady=5)
 
-        # Label for the results section
-        lbl_result = Label(top_output_frame, text="Result: ", anchor=W, pady=5)
-        lbl_result.pack(side=TOP, fill=X, expand=YES)
-
-        # Button for starting the calculation
+       # Button for starting the calculation
         btn_clear = Button(top_output_frame, text="Clear results", command=self.__clear_results)
         btn_clear.pack(side=RIGHT, fill=NONE, expand=NO)
 
+        # Label for the results section
+        lbl_result = Label(top_output_frame, text="Result: ", anchor=W, pady=5)
+        lbl_result.pack(side=RIGHT, fill=X, expand=YES)      
+
+         # Bottom output frame
+        bottom_output_frame = Frame(output_frame)
+
         # Textbox for the results
-        self.__txt_result = Text(output_frame)
+        self.__txt_result = Text(bottom_output_frame)
         self.__txt_result.config(state=DISABLED)
 
         # Scrollbar for the result textbox
-        scrl_result = Scrollbar(output_frame, orient=VERTICAL, command=self.__txt_result.yview)
+        scrl_result = Scrollbar(bottom_output_frame, orient=VERTICAL, command=self.__txt_result.yview)
 
         # Attaching scrollbar to the result textbox
         self.__txt_result['yscroll'] = scrl_result.set
@@ -85,9 +90,11 @@ class MainForm:
         self.__txt_result.pack(side=TOP, fill=BOTH, expand=YES)
 
         # Making the frames visible
-        input_frame.pack(side=TOP, fill=X, expand=YES)
-        top_output_frame.pack(side=TOP, fill=X, expand=YES)
+        input_frame.pack(side=TOP, fill=X, expand=NO)
         output_frame.pack(side=TOP, fill=BOTH, expand=YES)
+        top_output_frame.pack(side=TOP, fill=X, expand=NO)
+        bottom_output_frame.pack(side=TOP, fill=BOTH, expand=YES)
+        
 
         self.__main_form.config(menu=menubar)
 
@@ -101,8 +108,7 @@ class MainForm:
 
         try:
             self.__validate_input(radius_str)
-            self.__radius = mpf(radius_str)
-            result = OverlapCalculator.calculate_overlapping_length(self.__radius, self.__conditions)
+            result = OverlapCalculator.calculate_overlapping_length(mpf(radius_str), self.__conditions)
             result_str = nstr(result.get_overlapping_length(), self.__conditions.get_precision())
 
             # Adding the current result to the list of results
@@ -132,10 +138,19 @@ class MainForm:
 
 
     def __handleError(self, errMessage):
-        messagebox.showerror(title="Error", message=errMessage)
+        messagebox.showerror(title="Error", message=errMessage, parent=self.__main_form)
     
     def display(self):
         """Displays the main form."""
+        width = self.__main_form.winfo_screenwidth()
+        height = self.__main_form.winfo_screenheight()
+
+        coord_x = (width/2) - (225)
+        coord_y = (height/2) - (150)
+
+        # Centering the window
+        self.__main_form.geometry('%dx%d+%d+%d' % (width, height, coord_x, coord_y))
+
         self.__main_form.mainloop()
 
     def __change_settings(self):
@@ -149,7 +164,7 @@ class MainForm:
             try:
                 SettingsManager.write_settings(conditions)
             except IOError as err:
-                messagebox.showerror(title="Error", message=err)
+                messagebox.showerror(title="Error", message=err, parent=self.__main_form)
 
     def __save(self):
         """Saves the results in an xml file."""
@@ -158,7 +173,7 @@ class MainForm:
         try:
             self.__save_on_file(path)
         except IOError as err:
-            messagebox.showerror(title="Error", message=err)
+            messagebox.showerror(title="Error", message=err, parent=self.__main_form)
 
     def __save_on_file(self, path):
         # Creating the root element "results" and adding subelements "result"
@@ -196,7 +211,7 @@ class MainForm:
             conditions = SettingsManager.read_settings()
         except IOError as err:
             conditions = CalculationConditions(pi_algorithm, alpha_approximation_algorithm, precision)
-            messagebox.showwarning(title="Warning", message=err)
+            messagebox.showwarning(title="Warning", message=err, parent=self.__main_form)
 
         return conditions
 
@@ -205,6 +220,7 @@ class MainForm:
         self.__txt_result.config(state=NORMAL)
         self.__txt_result.delete(1.0, END)
         self.__txt_result.config(state=DISABLED)
+        self.__result_list.clear()
 
 
     def __exit(self):

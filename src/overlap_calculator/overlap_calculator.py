@@ -2,6 +2,7 @@ from mpmath import *
 from utils.pi.pi_util import PiUtility
 from .alpha_calculator.algorithm_runner import AlgorithmRunner, AlgorithmType
 from .result import Result
+from exceptions.calculation_exception import CalculationException
 
 class OverlapCalculator:
 
@@ -25,20 +26,21 @@ class OverlapCalculator:
             The length of the overlapping segment in the form of a result object.
         """
 
-        # We only recalculate alpha and Pi if the conditions has been changed
-        if (conditions.get_precision() != cls.__precision or
-            conditions.get_approximation_algorithm() != cls.__approximation_algorithm or
-            conditions.get_pi_algorithm() != PiUtility.get_algorithm()):
-            # We initialize the pi value before starting the calculations
-            PiUtility.init_pi(conditions.get_pi_algorithm(), conditions.get_precision() + 5)
-            
-            cls.__precision = conditions.get_precision()
-            cls.__approximation_algorithm = conditions.get_approximation_algorithm()
-            cls.__alpha = AlgorithmRunner.calculate_alpha(cls.__approximation_algorithm, cls.__precision)
-            cls.__alpha_over_two = cls.__alpha / mpf(2)
+        try:
+            # We only recalculate alpha and Pi if the conditions has been changed
+            if not cls.__constants_calculated(conditions):
+                # We initialize the pi value before starting the calculations
+                PiUtility.init_pi(conditions.get_pi_algorithm(), conditions.get_precision() + int(5))
+                
+                cls.__precision = conditions.get_precision()
+                cls.__approximation_algorithm = conditions.get_approximation_algorithm()
+                cls.__alpha = AlgorithmRunner.calculate_alpha(cls.__approximation_algorithm, cls.__precision)
+                cls.__alpha_over_two = cls.__alpha / mpf(2)
 
-            print("Calculation of overlapping length started.")
-            print("Alpha with the precision of", cls.__precision, "is:", nstr(cls.__alpha, cls.__precision + 1))
+                print("Calculation of overlapping length started.")
+                print("Alpha with the precision of", cls.__precision, "is:", nstr(cls.__alpha, cls.__precision + 1))
+        except CalculationException as err:
+            raise err
 
         # formula is : l = 2R(1 - cos(alpha/2))
 
@@ -49,3 +51,14 @@ class OverlapCalculator:
         result = Result(radius, conditions, overlapping_length, cls.__alpha, PiUtility.pi())
 
         return result
+
+    @classmethod
+    def __constants_calculated(cls, conditions):
+        if (PiUtility.pi() == 0 or cls.__alpha == 0 or
+            conditions.get_precision() != cls.__precision or
+            conditions.get_approximation_algorithm() != cls.__approximation_algorithm or
+            conditions.get_pi_algorithm() != PiUtility.get_algorithm()):
+
+            return False
+
+        return True    

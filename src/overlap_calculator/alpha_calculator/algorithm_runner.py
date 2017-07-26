@@ -1,5 +1,6 @@
-from .approximation_algorithms.newton import Newton
 from enum import Enum
+from .approximation_algorithms.newton import Newton
+from exceptions.calculation_exception import CalculationException
 
 # This is a module that provides an implementation for calculating 
 # the approximation of Alpha
@@ -13,6 +14,7 @@ ALGORITHMS = {
 # which are used for the calculation of alpha
 class AlgorithmType(Enum):
     Newton = 0
+    Bisection = 1
 
 
 class AlgorithmRunner:
@@ -31,7 +33,11 @@ class AlgorithmRunner:
         Returns:
             The result of the execution of the specified algorithm.
         """
-        return cls.__execute(algorithm_type, precision)
+
+        try:
+            return cls.__execute(algorithm_type, precision)
+        except CalculationException as err:
+            raise err
 
 
     @classmethod
@@ -45,4 +51,7 @@ class AlgorithmRunner:
             The result of the execution of the specified algorithm.
         """
         print("Calculation of alpha angle started.")
-        return ALGORITHMS[algorithm_type.value].calculate(precision)
+        try:
+            return ALGORITHMS[algorithm_type.value].calculate(precision)
+        except KeyError:
+            raise CalculationException("No implementation exists for the selected alpha approximation algorithm.")

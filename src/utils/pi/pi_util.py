@@ -1,14 +1,14 @@
 from mpmath import nstr
+from enum import Enum
 from .pi_algorithms.gregory_leibniz import GregoryLeibniz
 from .pi_algorithms.bbp import BBP
-from enum import Enum
+from exceptions.calculation_exception import CalculationException
 
 # This is a static util class that provides a function for
 # calculating the PI number
 
 ALGORITHMS = {
     0: BBP,
-    1: GregoryLeibniz,
 }
 
 class AlgorithmType(Enum):
@@ -38,7 +38,11 @@ class PiUtility:
         if cls.__pi == 0 or cls.__precision != precision or cls.__algorithm != algorithm_type:
             cls.__precision = precision
             cls.__algorithm = algorithm_type
-            cls.__calculate_pi()
+            
+            try:
+                cls.__calculate_pi()
+            except CalculationException as err:
+                raise err
 
 
     @classmethod
@@ -57,9 +61,15 @@ class PiUtility:
         Returns:
             A decimal number calculation of PI.
         """
-        print("Calculation of PI constant started.")
-        cls.__pi = ALGORITHMS[cls.__algorithm.value].calculate(cls.__precision)
-        print("PI with the precision of", cls.__precision, "is:", nstr(cls.__pi, cls.__precision))
+        
+        try:
+            print("Calculation of PI constant started.")
+            cls.__pi = ALGORITHMS[cls.__algorithm.value].calculate(cls.__precision)
+            print("PI with the precision of", cls.__precision, "is:", nstr(cls.__pi, cls.__precision))
+        except KeyError:
+            cls.__pi = 0
+            raise CalculationException("No implementation exists for the selected pi calculation algorithm.")
+        
 
     @classmethod
     def get_algorithm(cls):

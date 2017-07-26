@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
 import sys
-from mpmath import mpf, nstr
 from exceptions.validation_exception import ValidationException
 from utils.pi.pi_util import AlgorithmType as PiAlgorithmType
 from overlap_calculator.overlap_calculator import AlgorithmType as AproximationAlgorithmType
@@ -101,10 +100,10 @@ class SettingsForm(Toplevel):
             precision = self.__txt_precision.get()
             self.__validate_input(precision)
 
-            pi_algorithm = self.__pi_algorithm_var.get()
-            alpha_algorithm = self.__alpha_algorithm_var.get()
+            pi_algorithm = PiAlgorithmType[self.__pi_algorithm_var.get()]
+            alpha_algorithm = AproximationAlgorithmType[self.__alpha_algorithm_var.get()]
 
-            conditions = CalculationConditions(pi_algorithm, alpha_algorithm, precision)
+            conditions = CalculationConditions(pi_algorithm, alpha_algorithm, int(precision))
             self.__settings = conditions
             self.__exit()
         except ValidationException as err:
@@ -113,15 +112,15 @@ class SettingsForm(Toplevel):
     def __validate_input(self, input_val):
         """Checks to see if the input value is valid or not. If invalid raise an exception"""
         try:
-            number = mpf(input_val)
-            if number <= 0:
-                raise ValidationException("The entered number is not in the range. Please enter a positive number.")
+            number = int(input_val)
+            if number <= 0 or number > 100:
+                raise ValidationException("The entered number is not in the range. Please enter a number between 1 and 100.")
         except ValueError:
-            raise ValidationException("The entered value is not a number. Please enter a positive number.")
+            raise ValidationException("The entered value is not a number. Please enter a number between 1 and 100.")
 
 
     def __handleError(self, errMessage):
-        messagebox.showerror(title="Error", message=errMessage)
+        messagebox.showerror(title="Error", message=errMessage, parent=self)
 
     def __exit(self):
         self.destroy()
