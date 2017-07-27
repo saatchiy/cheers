@@ -1,4 +1,5 @@
 from enum import Enum
+from mpmath import nstr
 from .approximation_algorithms.newton import Newton
 from exceptions.calculation_exception import CalculationException
 
@@ -50,8 +51,10 @@ class AlgorithmRunner:
         Returns:
             The result of the execution of the specified algorithm.
         """
-        print("Calculation of alpha angle started.")
+        print("\nCalculation of alpha angle started.")
         try:
-            return ALGORITHMS[algorithm_type.value].calculate(precision)
+            alpha = ALGORITHMS[algorithm_type.value].calculate(precision)
+            print("Alpha calculated to {} decimal precision as {}".format(precision, nstr(alpha, precision + 1)))
+            return alpha
         except KeyError:
             raise CalculationException("No implementation exists for the selected alpha approximation algorithm.")

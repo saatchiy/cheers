@@ -33,7 +33,7 @@ class Newton(AlgorithmBase):
         cls.__pi_over_two = PiUtility.pi() / mpf(2)
 
         # Setting the decimal places
-        mp.dps = precision + 1
+        mp.dps = precision + 6
 
         # Initial value for newton approximation algorithm
         alpha = cls.__INITIAL_VALUE

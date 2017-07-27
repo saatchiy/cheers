@@ -37,16 +37,17 @@ class OverlapCalculator:
                 cls.__alpha = AlgorithmRunner.calculate_alpha(cls.__approximation_algorithm, cls.__precision)
                 cls.__alpha_over_two = cls.__alpha / mpf(2)
 
-                print("Calculation of overlapping length started.")
                 print("Alpha with the precision of", cls.__precision, "is:", nstr(cls.__alpha, cls.__precision + 1))
         except CalculationException as err:
             raise err
 
         # formula is : l = 2R(1 - cos(alpha/2))
-
+        print("\nCalculation of overlapping length for the radius of {} started.".format(coaster_radius))
         radius = mpf(coaster_radius)
 
         overlapping_length = mpf(2) * radius * (mpf(1) - cos(cls.__alpha_over_two))
+
+        print("\nOverlapping length calculated at {} decimal places as {}".format(cls.__precision, overlapping_length))
 
         result = Result(radius, conditions, overlapping_length, cls.__alpha, PiUtility.pi())
 

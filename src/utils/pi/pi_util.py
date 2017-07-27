@@ -33,16 +33,16 @@ class PiUtility:
             precision: The desired precision of the calculation (default 3)
 
         Returns:
-            A decimal number calculation of PI.
+            A mp float number calculation of PI.
         """
-        if cls.__pi == 0 or cls.__precision != precision or cls.__algorithm != algorithm_type:
-            cls.__precision = precision
-            cls.__algorithm = algorithm_type
-            
-            try:
-                cls.__calculate_pi()
-            except CalculationException as err:
-                raise err
+
+        cls.__precision = precision
+        cls.__algorithm = algorithm_type
+        
+        try:
+            cls.__calculate_pi()
+        except CalculationException as err:
+            raise err
 
 
     @classmethod
@@ -63,7 +63,7 @@ class PiUtility:
         """
         
         try:
-            print("Calculation of PI constant started.")
+            print("\nCalculation of PI constant started.")
             cls.__pi = ALGORITHMS[cls.__algorithm.value].calculate(cls.__precision)
             print("PI with the precision of", cls.__precision, "is:", nstr(cls.__pi, cls.__precision))
         except KeyError:
