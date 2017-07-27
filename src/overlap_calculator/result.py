@@ -40,6 +40,32 @@ class Result:
 
         return result_elem
 
+    def  __str__(self):
+        """Converts the object to a string suitable to be presented to the user."""
+
+        precision = self.__calculation_conditions.get_precision()
+
+        result_str = "Pi calculation algorithm: {}\nPi is: {}\n"
+        result_str += "Approximation algorithm for alpha: {}\n"
+        result_str += "Alpha angle must be: {}\nCoasters radius: {}\n"
+        result_str += "Length of the overlapping segment: {}"
+
+        result_str = result_str.format(self.__calculation_conditions.get_pi_algorithm().name,
+                                            self.__pi,
+                                            self.__calculation_conditions.get_approximation_algorithm().name,
+                                            self.__alpha,
+                                            nstr(self.__coaster_radius, precision),
+                                            nstr(self.__overlapping_length, precision))
+
+        # result_str = "Based on the specified conditions,\nPi number calculated using {}"
+        # result_str += "" + self.__calculation_conditions.get_pi_algorithm().name
+        # result_str += " algorithm as {}" + self.__pi + "\n"
+        # result_str += "Alpha angle calculated using {}" + self.__calculation_conditions.get_approximation_algorithm().name 
+        # result_str += " algorithm as {}" + self.__alpha + "\n"
+        # result_str += "Given the value of coasters radius as {}" + nstr(self.__coaster_radius, precision) + ", "
+        # result_str += "length of the overlapping section must be {}" + nstr(self.__overlapping_length, precision)
+
+        return result_str
 
     def get_coaster_radius(self):
         return self.__coaster_radius

@@ -4,7 +4,7 @@
 		<algorithm>BBP</algorithm>
 	</pi>
 	<alpha>
-		<algorithm>Bisection</algorithm>
+		<algorithm>Newton</algorithm>
 		<precision>10</precision>
 	</alpha>
 </settings>

@@ -24,10 +24,14 @@ class MainForm:
     def __init_main_form(self):
         self.__main_form = Tk()
         self.__main_form.title("Cheers")
-        w = int(self.__main_form.winfo_screenwidth() / 4)
-        h = int(self.__main_form.winfo_screenheight() / 3)
-        self.__main_form.minsize(w, h)
-        self.__main_form.maxsize(w, h)
+        self.__width = int(self.__main_form.winfo_screenwidth() / 4)
+        if self.__width < 450:
+            self.__width = 450
+        self.__height = int(self.__main_form.winfo_screenheight() / 3)
+        if self.__height < 350:
+            self.__height = 350
+        self.__main_form.minsize(self.__width, self.__height)
+        self.__main_form.maxsize(self.__width, self.__height)
         self.__create_widgets()
 
     def __create_widgets(self):
@@ -109,17 +113,17 @@ class MainForm:
         try:
             self.__validate_input(radius_str)
             result = OverlapCalculator.calculate_overlapping_length(mpf(radius_str), self.__conditions)
-            result_str = nstr(result.get_overlapping_length(), self.__conditions.get_precision())
 
-            # Adding the current result to the list of results
-            self.__result_list.append(result)
+            if result != None:
+                # Adding the current result to the list of results
+                self.__result_list.append(result)
 
-            # Filling the result textbox with the result of the calculation
-            self.__txt_result.config(state=NORMAL)
-            if len(self.__result_list) != 1:
-                self.__txt_result.insert(END, "\n---------------------------------\n")    
-            self.__txt_result.insert(END, result_str)
-            self.__txt_result.config(state=DISABLED)
+                # Filling the result textbox with the result of the calculation
+                self.__txt_result.config(state=NORMAL)
+                if len(self.__result_list) != 1:
+                    self.__txt_result.insert(END, "\n---------------------------------\n")    
+                self.__txt_result.insert(END, result)
+                self.__txt_result.config(state=DISABLED)
 
         except ValidationException as err:
             self.__handleError(err)
@@ -142,14 +146,14 @@ class MainForm:
     
     def display(self):
         """Displays the main form."""
-        width = self.__main_form.winfo_screenwidth()
-        height = self.__main_form.winfo_screenheight()
+        screen_width = self.__main_form.winfo_screenwidth()
+        screen_height = self.__main_form.winfo_screenheight()
 
-        coord_x = (width/2) - (225)
-        coord_y = (height/2) - (150)
+        coord_x = int(screen_width/2) - int(self.__width/2)
+        coord_y = int(screen_height/2) - int(self.__height/2)
 
         # Centering the window
-        self.__main_form.geometry('%dx%d+%d+%d' % (width, height, coord_x, coord_y))
+        self.__main_form.geometry('%dx%d+%d+%d' % (screen_width, screen_height, coord_x, coord_y))
 
         self.__main_form.mainloop()
 
@@ -170,10 +174,12 @@ class MainForm:
         """Saves the results in an xml file."""
         path = asksaveasfilename(title="Save Results", defaultextension="xml", 
                     filetypes=[("XML files", "*.xml")], parent=self.__main_form, initialdir="./")
-        try:
-            self.__save_on_file(path)
-        except IOError as err:
-            messagebox.showerror(title="Error", message=err, parent=self.__main_form)
+        
+        if path != "":
+            try:
+                self.__save_on_file(path)
+            except IOError as err:
+                messagebox.showerror(title="Error", message=err, parent=self.__main_form)
 
     def __save_on_file(self, path):
         # Creating the root element "results" and adding subelements "result"
