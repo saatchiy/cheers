@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!ELEMENT results           (result*)                           >
+<!ELEMENT result            (conditions,radius,overlaplength)   >
+<!ELEMENT conditions        (pi,alpha)                          >
+<!ELEMENT pi                (algorithm,value)                   >
+<!ELEMENT algorithm         (#PCDATA)                           >
+<!ELEMENT value             (#PCDATA)                           >
+<!ELEMENT alpha             (algorithm,precision,value)         >
+<!ELEMENT precision         (#PCDATA)                           >
+<!ELEMENT radius            (#PCDATA)                           >
+<!ELEMENT overlaplength     (#PCDATA)                           >
