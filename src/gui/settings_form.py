@@ -13,6 +13,7 @@ class SettingsForm(Toplevel):
         self.__settings = None
         self.__init_setting_form(parent, conditions)
 
+
     def __init_setting_form(self, parent, conditions):
         Toplevel.__init__(self, parent)
         self.transient(parent)
@@ -21,6 +22,7 @@ class SettingsForm(Toplevel):
         self.minsize(320, 220)
         self.maxsize(320, 220)
         self.__create_widgets(conditions)
+
 
     def __create_widgets(self, conditions):
         """Creates controls of the settings form."""
@@ -94,6 +96,7 @@ class SettingsForm(Toplevel):
         self.initial_focus.focus_set()
         self.wait_window(self)
 
+
     def __save(self):
         """Saves the changes on the xml file"""
         try:
@@ -108,7 +111,8 @@ class SettingsForm(Toplevel):
             self.__exit()
         except ValidationException as err:
             self.__handleError(err)
-    
+
+
     def __validate_input(self, input_val):
         """Checks to see if the input value is valid or not. If invalid raise an exception"""
         try:
@@ -122,8 +126,10 @@ class SettingsForm(Toplevel):
     def __handleError(self, errMessage):
         messagebox.showerror(title="Error", message=errMessage, parent=self)
 
+
     def __exit(self):
         self.destroy()
+
 
     def get_settings(self):
         return self.__settings

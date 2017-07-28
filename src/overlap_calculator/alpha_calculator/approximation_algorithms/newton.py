@@ -18,6 +18,7 @@ class Newton(AlgorithmBase):
     def get_initial_value(cls):
         return cls.__INITIAL_VALUE
 
+
     @classmethod
     def calculate(cls, precision):
         """Calculates alpha.

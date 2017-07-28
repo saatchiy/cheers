@@ -21,6 +21,7 @@ class MainForm:
         self.__result_list = []
         self.__init_main_form()
 
+
     def __init_main_form(self):
         self.__main_form = Tk()
         self.__main_form.title("Cheers")
@@ -33,6 +34,7 @@ class MainForm:
         self.__main_form.minsize(self.__width, self.__height)
         self.__main_form.maxsize(self.__width, self.__height)
         self.__create_widgets()
+
 
     def __create_widgets(self):
         """Creates controls of the main form."""
@@ -143,7 +145,8 @@ class MainForm:
 
     def __handleError(self, errMessage):
         messagebox.showerror(title="Error", message=errMessage, parent=self.__main_form)
-    
+
+
     def display(self):
         """Displays the main form."""
         screen_width = self.__main_form.winfo_screenwidth()
@@ -156,6 +159,7 @@ class MainForm:
         self.__main_form.geometry('%dx%d+%d+%d' % (screen_width, screen_height, coord_x, coord_y))
 
         self.__main_form.mainloop()
+
 
     def __change_settings(self):
         """Changes the settings of the application by saving new values in the xml file."""
@@ -170,6 +174,7 @@ class MainForm:
             except IOError as err:
                 messagebox.showerror(title="Error", message=err, parent=self.__main_form)
 
+
     def __save(self):
         """Saves the results in an xml file."""
         path = asksaveasfilename(title="Save Results", defaultextension="xml", 
@@ -180,6 +185,7 @@ class MainForm:
                 self.__save_on_file(path)
             except IOError as err:
                 messagebox.showerror(title="Error", message=err, parent=self.__main_form)
+
 
     def __save_on_file(self, path):
         # Creating the root element "results" and adding subelements "result"
@@ -205,6 +211,7 @@ class MainForm:
             print(errormsg)
             raise IOError(errormsg)
 
+
     def __read_settings(self):
         # Default algorithm to calculate pi
         pi_algorithm = PiAlgorithmType.BBP
@@ -220,6 +227,7 @@ class MainForm:
             messagebox.showwarning(title="Warning", message=err, parent=self.__main_form)
 
         return conditions
+
 
     def __clear_results(self):
         # Clearing the result list and the textbox

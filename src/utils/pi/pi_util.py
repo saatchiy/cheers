@@ -49,6 +49,7 @@ class PiUtility:
     def pi(cls):
         return cls.__pi
 
+
     @classmethod
     def __calculate_pi(cls):
         """Internal function for calculation of pi. This function calls

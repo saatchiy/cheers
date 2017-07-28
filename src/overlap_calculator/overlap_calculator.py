@@ -53,6 +53,7 @@ class OverlapCalculator:
 
         return result
 
+
     @classmethod
     def __constants_calculated(cls, conditions):
         if (PiUtility.pi() == 0 or cls.__alpha == 0 or

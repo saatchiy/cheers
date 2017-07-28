@@ -64,6 +64,7 @@ class SettingsManager:
         conditions = CalculationConditions(pi_algorithm, alpha_approximation_algorithm, precision)
         return conditions
 
+
     @staticmethod
     def write_settings(conditions):
         pi_algorithm = conditions.get_pi_algorithm().name
@@ -103,6 +104,7 @@ class SettingsManager:
             errormsg = "Saving the settings failed. " + err
             print(errormsg)
             raise IOError(errormsg)
+
 
     @staticmethod
     def __get_file_path():

@@ -12,6 +12,7 @@ class Result:
         self.__alpha = alpha
         self.__pi = pi
 
+
     def to_xml_element(self):
         """Creats a result XML element."""
 
@@ -39,6 +40,7 @@ class Result:
         overlap_len_elem = ET.SubElement(result_elem, "overlaplength").text = nstr(self.__overlapping_length, precision)
 
         return result_elem
+
 
     def  __str__(self):
         """Converts the object to a string suitable to be presented to the user."""
