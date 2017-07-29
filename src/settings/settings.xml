@@ -5,6 +5,6 @@
 	</pi>
 	<alpha>
 		<algorithm>Newton</algorithm>
-		<precision>10</precision>
+		<precision>20</precision>
 	</alpha>
 </settings>

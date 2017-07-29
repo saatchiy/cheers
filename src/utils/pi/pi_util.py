@@ -1,6 +1,5 @@
 from mpmath import nstr
 from enum import Enum
-from .pi_algorithms.gregory_leibniz import GregoryLeibniz
 from .pi_algorithms.bbp import BBP
 from exceptions.calculation_exception import CalculationException
 
