@@ -53,6 +53,17 @@ class TestPi(unittest.TestCase):
         self.assertTrue(almosteq(my_pi, mpmathify("3.141592653589793238462", strings=True), 1e-20))
         print("=======================")
 
+    def test_pi_negative_precision(self):
+        """Checking the return value if the precision is negative.
+
+            Return:
+                Zero
+        """
+        print("Test of Pi calculation with negative decimal precision")
+        PiUtility.init_pi(AlgorithmType.BBP, -2)
+        my_pi = PiUtility.pi() 
+        self.assertEqual(my_pi, mpf(0))
+        print("=======================")
 
 if __name__ == '__main__':
     unittest.main()

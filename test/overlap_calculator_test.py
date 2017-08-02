@@ -63,15 +63,6 @@ class TestOverlapCalculation(unittest.TestCase):
         self.assertTrue(almosteq(result.get_overlapping_length(), mpmathify("1192054.49341826", strings=True), 1e-10))
         print("=======================")
 
-    def test_length_10dp_r0_001_accuracy(self):
-        """Test for coaster radius = 0.001 ."""
-        print("Test for coaster radius = 0.001")
-        conditions = CalculationConditions(PiAlgorithmType.BBP, AlphaAlgorithmType.Newton, 10)
-        radius = mpf(0.001)
-        result = OverlapCalculator.calculate_overlapping_length(radius, conditions)
-        self.assertTrue(almosteq(result.get_overlapping_length(), mpmathify("0.0011920544", strings=True), 1e-10))
-        print("=======================")
-
     def test_length_14dp_r0_0019_accuracy(self):
         """Test for coaster radius = 0.0019 with the precision of 14 ."""
         print("Test for coaster radius = 0.0019 with the precision of 14")
